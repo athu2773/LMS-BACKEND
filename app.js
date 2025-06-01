@@ -44,7 +44,7 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 mongoose
-  .connect("mongodb://127.0.0.1:27017/lms-backend-db")
+  .connect("mongodb+srv://lms_db:2khARTDSooAMxxTZ@cluster0.9ftnnen.mongodb.net/lms-backend-db")
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(PORT, () => {
