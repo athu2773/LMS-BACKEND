@@ -32,8 +32,12 @@ exports.getAverageAssessmentScore = async (req, res) => {
     const assessments = await Assessment.find({ course: courseId }).select("_id");
     const assessmentIds = assessments.map((a) => a._id);
 
+    if (assessmentIds.length === 0) {
+      return res.status(200).json({ averageAssessmentScore: 0 });
+    }
+
     const result = await Progress.aggregate([
-      { $match: { course: mongoose.Types.ObjectId(courseId) } },
+      { $match: { course: courseId } },
       { $unwind: "$assessmentScores" },
       { $match: { "assessmentScores.assessment": { $in: assessmentIds } } },
       {

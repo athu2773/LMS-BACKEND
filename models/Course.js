@@ -11,17 +11,26 @@ const courseSchema = new mongoose.Schema({
   instructor: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   syllabus: [
     {
-      unitTitle: String,
-      objectives: [String],
-      timeline: String,
+      unitTitle: { type: String, required: true },
+      objectives: [{ type: String }],
+      timeline: { type: String },
+      lessons: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lesson" }],
+      assessments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Assessment" }],
     },
   ],
   content: [versionSchema],
+  tags: [{ type: String }],
   status: {
     type: String,
     enum: ["draft", "pending", "published"],
     default: "draft",
   },
+  approvalStatus: {
+    type: String,
+    enum: ["pending", "approved", "rejected"],
+    default: "pending",
+  },
+  approvedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   createdAt: { type: Date, default: Date.now },
 });
 

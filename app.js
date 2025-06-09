@@ -36,21 +36,30 @@ app.use("/api/progress", progressRoutes);
 app.use("/api/assessments", assessmentRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
+// 404 handler for unknown API routes
+app.use("/api", (req, res) => {
+  res.status(404).json({ message: "API endpoint not found" });
+});
+
 // Global error handler
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ message: "Server error" });
 });
 
-const PORT = process.env.PORT || 5000;
-mongoose
-  .connect("mongodb+srv://lms_db:2khARTDSooAMxxTZ@cluster0.9ftnnen.mongodb.net/lms-backend-db?retryWrites=true&w=majority")
-  .then(() => {
-    console.log("Connected to MongoDB");
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+module.exports = app;
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => {
+      console.log("Connected to MongoDB");
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    })
+    .catch((err) => {
+      console.error("MongoDB connection error:", err);
     });
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-  });
+}

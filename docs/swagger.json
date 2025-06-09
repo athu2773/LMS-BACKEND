@@ -22,6 +22,29 @@
           "400": { "description": "User already exists" }
         }
       }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserLogin" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AuthResponse" }
+              }
+            }
+          },
+          "401": { "description": "Invalid credentials" }
+        }
+      }
     }
   },
   "components": {
@@ -35,6 +58,36 @@
           "role": { "type": "string", "enum": ["student", "instructor", "admin"] }
         },
         "required": ["name", "email", "password"]
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string" },
+          "password": { "type": "string" }
+        },
+        "required": ["email", "password"]
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "_id": { "type": "string" },
+              "name": { "type": "string" },
+              "email": { "type": "string" },
+              "role": { "type": "string" },
+              "bio": { "type": "string" },
+              "avatar": { "type": "string" },
+              "enrolledCourses": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "createdAt": { "type": "string", "format": "date-time" }
+            }
+          },
+          "token": { "type": "string" }
+        }
       }
     }
   }

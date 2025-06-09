@@ -62,8 +62,34 @@ exports.deleteCourse = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    await course.remove();
+    await course.deleteOne();
     res.status(200).json({ message: "Course deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.approveCourse = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id);
+    if (!course) return res.status(404).json({ message: "Course not found" });
+    course.approvalStatus = "approved";
+    course.approvedBy = req.user.id;
+    await course.save();
+    res.status(200).json({ message: "Course approved", course });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.rejectCourse = async (req, res) => {
+  try {
+    const course = await Course.findById(req.params.id);
+    if (!course) return res.status(404).json({ message: "Course not found" });
+    course.approvalStatus = "rejected";
+    course.approvedBy = req.user.id;
+    await course.save();
+    res.status(200).json({ message: "Course rejected", course });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
