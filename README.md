@@ -52,7 +52,7 @@ This project is production-ready with **Docker, CI/CD pipelines, and full API do
 - **Email**: Nodemailer, SendGrid  
 - **Testing**: Jest, Supertest  
 - **Docs**: Swagger, Postman Collection  
-- **Deployment**: Docker, Docker Compose, Render / Railway / AWS EC2  
+- **Deployment**: Railways
 - **CI/CD**: GitHub Actions  
 
 ---
